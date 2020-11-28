@@ -47,9 +47,9 @@ tf.app.flags.DEFINE_float("seq2seq_max_gradient_norm", 5, "Clip gradients to thi
 
 # seq2seq basic train parameter
 tf.app.flags.DEFINE_integer("train_batch_size", 16, "Batch size to use during training.")
-tf.app.flags.DEFINE_integer("train_iterations", 100, "Iterations to train for.")
-tf.app.flags.DEFINE_integer("train_test_every", 10, "How often to compute error on the test set.")
-tf.app.flags.DEFINE_integer("train_save_every", 1000, "How often to compute error on the test set.")
+tf.app.flags.DEFINE_integer("train_iterations", 50000, "Iterations to train for.")
+tf.app.flags.DEFINE_integer("train_test_every", 1000, "How often to compute error on the test set.")
+tf.app.flags.DEFINE_integer("train_save_every", 5000, "How often to compute error on the test set.")
 tf.app.flags.DEFINE_boolean("train_checkpoint_load", 0, "Weather to load checkpoint or not.")
 tf.app.flags.DEFINE_boolean("train_sample", False, "Set to True for sampling.")
 

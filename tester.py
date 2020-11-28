@@ -128,7 +128,7 @@ def init_seq2seq_model():
   else:
     print("Checkpoint Loaded")
     # model.saver.restore(sess, data_utils.get_checkpoint(train_dir))
-    tf.saver.restore(sess, tf.train.latest_checkpoint("saved"))
+    tf.train.Saver.restore(sess, tf.train.latest_checkpoint("saved"))
 
   # 계산 그래프를 출력을 위해 summary 에 저장
   # ref) self.train_writer = tf.summary.FileWriter(os.path.normpath(os.path.join(summaries_dir, 'train')))
