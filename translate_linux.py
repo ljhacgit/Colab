@@ -47,8 +47,8 @@ tf.app.flags.DEFINE_float("seq2seq_max_gradient_norm", 5, "Clip gradients to thi
 
 # seq2seq basic train parameter
 tf.app.flags.DEFINE_integer("train_batch_size", 16, "Batch size to use during training.")
-tf.app.flags.DEFINE_integer("train_iterations", 50000, "Iterations to train for.")
-tf.app.flags.DEFINE_integer("train_test_every", 1000, "How often to compute error on the test set.")
+tf.app.flags.DEFINE_integer("train_iterations", 100, "Iterations to train for.")
+tf.app.flags.DEFINE_integer("train_test_every", 10, "How often to compute error on the test set.")
 tf.app.flags.DEFINE_integer("train_save_every", 1000, "How often to compute error on the test set.")
 tf.app.flags.DEFINE_boolean("train_checkpoint_load", 0, "Weather to load checkpoint or not.")
 tf.app.flags.DEFINE_boolean("train_sample", False, "Set to True for sampling.")
@@ -188,6 +188,7 @@ def train():
     log_file.write(" train_iterations         : %d\n" % FLAGS.train_iterations)
     log_file.write("\n")
 
+
   # init sess
   with sess:
     # This is the training loop
@@ -247,6 +248,8 @@ def train():
         test_step_losses, test_step_euler_losses = data_utils.get_loss(step_output, decoder_outputs, normalize_parameter)
         test_step_euler_loss = float(np.mean(test_step_euler_losses))
 
+        previous_losses.append([step_avg_loss, test_step_loss, test_step_euler_loss])
+
         # print data
         print("\nData Logger")
         print("RAW DATA")
@@ -288,7 +291,6 @@ def train():
                                                                         test_step_loss, test_step_euler_loss))
         print("--------------------------\n")
 
-        previous_losses.append([step_avg_loss, test_step_loss, test_step_euler_loss])
 
         # data save
         if current_step % FLAGS.train_save_every == 0:
@@ -327,13 +329,14 @@ def train():
 
         # Reset global time and loss
         step_time, step_avg_loss = 0, 0
-        sys.stdout.flush()
+        # sys.stdout.flush()
 
-    plt.plot(previous_losses[0], label="train loss")
-    plt.plot(previous_losses[1], label="test loss")
-    plt.plot(previous_losses[2], label="test euler loss")
+    previous_losses = np.array(previous_losses)
+    plt.plot(previous_losses[:, 0], label="train loss")
+    plt.plot(previous_losses[:, 1], label="test loss")
+    plt.plot(previous_losses[:, 2], label="test euler loss")
     plt.legend()
-    plt.plot()
+    plt.show()
 
     # 이전에 사용된 적이 있는 경우, 시각화용 파일 삭제
     try:
