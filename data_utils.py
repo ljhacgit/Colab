@@ -296,9 +296,9 @@ def get_preprocessed_data(actions, seq2seq_input_size, seq2seq_output_size, data
   print("Reading training data (seq_len_in: {0}, seq_len_out {1}).".format(
     seq2seq_input_size, seq2seq_output_size))
 
-  # 학습용, 테스트용 배우 선별
-  train_subject_ids = [1, 6, 7, 8, 9, 11]
-  test_subject_ids = [5]
+  # 학습용, 테스트용 배우 임의 선별
+  train_subject_ids = [1, 6, 7, 8, 9]
+  test_subject_ids = [5, 11]
 
   # load_data 사용해 각각 데이터 불러옴
   # train_data : {(subject, action, subaction):[n, d]}, complete_train_data : [n, d] (data from subact 2)

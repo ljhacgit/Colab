@@ -46,7 +46,7 @@ tf.app.flags.DEFINE_integer("seq2seq_learning_rate_decay_step", 2500, "Every thi
 tf.app.flags.DEFINE_float("seq2seq_max_gradient_norm", 5, "Clip gradients to this norm.")
 
 # seq2seq basic train parameter
-tf.app.flags.DEFINE_integer("train_batch_size", 128, "Batch size to use during training.")
+tf.app.flags.DEFINE_integer("train_batch_size", 1000, "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("train_iterations", 50000, "Iterations to train for.")
 tf.app.flags.DEFINE_integer("train_test_every", 1000, "How often to compute error on the test set.")
 tf.app.flags.DEFINE_integer("train_save_every", 1000, "How often to compute error on the test set.")
@@ -186,7 +186,7 @@ def train():
 
   with open(train_dir + "/train_log.txt", "a") as log_file:
     log_file.write("\n")
-    log_file.write("Start train with parameter as,\n")
+    log_file.write("Start test with parameter as,\n")
     log_file.write(" train_batch_size         : %d\n" % FLAGS.train_batch_size)
     log_file.write(" train_iterations         : %d\n" % FLAGS.train_iterations)
     log_file.write("\n")
@@ -220,6 +220,7 @@ def train():
     plt.legend()
     plt.show()
     print("--------------------------")
+
     print("{0: <16} |".format("data_millisec"), end="")
     for ms in [80, 160, 320, 400, 560, 1000]:
         print(" {0:5d} |".format(ms), end="")
@@ -245,6 +246,29 @@ def train():
           "Test step loss (euler angle):       %.4f"
           % (model.global_step.eval(), model.learning_rate.eval(), test_step_loss, test_step_euler_loss))
     print("--------------------------\n")
+
+    with open(train_dir + "/train_log.txt", "a") as log_file:
+      log_file.write("\nData Logger\n")
+      log_file.write("--------------------------\n")
+      log_file.write("{0: <16} |".format("data_millisec"))
+      for ms in [80, 160, 320, 400, 560, 1000]:
+        log_file.write(" {0:5d} |".format(ms))
+      log_file.write("\n")
+      log_file.write("{0: <16} |".format("error_expmap "))
+      for ms in [1, 3, 7, 9, 13, 24]:
+        if FLAGS.seq2seq_output_size >= ms + 1:
+          log_file.write(" {0:.3f} |".format(test_step_euler_losses[ms]))
+        else:
+          log_file.write("   n/a |")
+      log_file.write("\n--------------------------\n")
+      log_file.write("Global step:         %d\n"
+                     "Learning rate:       %.4f\n"
+                     "--------------------------\n"
+                     "Test step loss (expmap):            %.4f\n"
+                     "Test step loss (euler angle):       %.4f\n"
+                     % (model.global_step.eval(), model.learning_rate.eval(),
+                        test_step_loss, test_step_euler_loss))
+      log_file.write("--------------------------\n")
 
     # Reset global time and loss
     step_time, step_avg_loss = 0, 0
