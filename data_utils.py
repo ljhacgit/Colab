@@ -408,18 +408,6 @@ def get_loss(step_output, decoder_outputs, normalize_parameter):
   return np.mean(batch_error, 0), np.mean(batch_euler_error, 0)
 
 
-def get_checkpoint(train_dir):
-  ckpt = tf.train.get_checkpoint_state(train_dir, latest_filename="checkpoint")
-  print("train_dir", train_dir)
-  if ckpt and ckpt.model_checkpoint_path:
-    ckpt_name = os.path.basename(ckpt.model_checkpoint_path)
-    print("Loading model {0}".format(ckpt_name))
-    return ckpt.model_checkpoint_path
-  else:
-    print("Could not find checkpoint. Aborting.")
-    raise (ValueError, "Checkpoint {0} does not seem to exist".format(ckpt.model_checkpoint_path))
-
-
 def save_visualize_data(visualize_dir, action, decoder_outputs, model_output, normalize_parameter):
   # 비정규화
   ground_truth = denormalize_data(decoder_outputs[0, :, :], normalize_parameter)

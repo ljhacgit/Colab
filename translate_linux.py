@@ -123,11 +123,7 @@ def init_seq2seq_model():
     FLAGS.seq2seq_reversed_input)
 
   # 전체 파라미터 초기화
-  if not FLAGS.train_checkpoint_load:
-    sess.run(tf.global_variables_initializer())
-  else:
-    print("Checkpoint Loaded")
-    model.saver.restore(sess, data_utils.get_checkpoint(train_dir))
+  sess.run(tf.global_variables_initializer())
 
   # 계산 그래프를 출력을 위해 summary 에 저장
   # ref) self.train_writer = tf.summary.FileWriter(os.path.normpath(os.path.join(summaries_dir, 'train')))
