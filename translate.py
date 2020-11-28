@@ -353,10 +353,6 @@ def train():
       # 시각화 화면 출력
       forward_kinematics.visualize_data(visualize_dir, action)
 
-t = True
-if t:
-  train()
-else:
-  for action in define_actions(FLAGS.action):
-    forward_kinematics.visualize_data(visualize_dir, action)
+
+train()
 
