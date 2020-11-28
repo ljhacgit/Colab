@@ -250,12 +250,14 @@ def train():
         # print data
         print("\nData Logger")
         print("RAW DATA")
+        '''
         plt.plot(test_step_euler_losses, label="euler")
         plt.legend()
         plt.show()
         plt.plot(test_step_losses, label="expmap")
         plt.legend()
         plt.show()
+        '''
         print("--------------------------")
         print("{0: <16} |".format("data_millisec"), end="")
         for ms in [80, 160, 320, 400, 560, 1000]:
@@ -286,7 +288,7 @@ def train():
                                                                         test_step_loss, test_step_euler_loss))
         print("--------------------------\n")
 
-        previous_losses.append(step_avg_loss)
+        previous_losses.append([step_avg_loss, test_step_loss, test_step_euler_loss])
 
         # data save
         if current_step % FLAGS.train_save_every == 0:
@@ -326,6 +328,12 @@ def train():
         # Reset global time and loss
         step_time, step_avg_loss = 0, 0
         sys.stdout.flush()
+
+    plt.plot(previous_losses[0], label="train loss")
+    plt.plot(previous_losses[1], label="test loss")
+    plt.plot(previous_losses[2], label="test euler loss")
+    plt.legend()
+    plt.plot()
 
     # 이전에 사용된 적이 있는 경우, 시각화용 파일 삭제
     try:

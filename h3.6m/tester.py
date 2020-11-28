@@ -50,7 +50,7 @@ tf.app.flags.DEFINE_integer("train_batch_size", 16, "Batch size to use during tr
 tf.app.flags.DEFINE_integer("train_iterations", 50000, "Iterations to train for.")
 tf.app.flags.DEFINE_integer("train_test_every", 1000, "How often to compute error on the test set.")
 tf.app.flags.DEFINE_integer("train_save_every", 1000, "How often to compute error on the test set.")
-tf.app.flags.DEFINE_boolean("train_checkpoint_load", 0, "Weather to load checkpoint or not.")
+tf.app.flags.DEFINE_boolean("train_checkpoint_load", 1, "Weather to load checkpoint or not.")
 tf.app.flags.DEFINE_boolean("train_sample", False, "Set to True for sampling.")
 
 # additional
@@ -127,7 +127,8 @@ def init_seq2seq_model():
     sess.run(tf.global_variables_initializer())
   else:
     print("Checkpoint Loaded")
-    model.saver.restore(sess, data_utils.get_checkpoint(train_dir))
+    # model.saver.restore(sess, data_utils.get_checkpoint(train_dir))
+    # saver = tf.train.import_meta_graph("")
 
   # 계산 그래프를 출력을 위해 summary 에 저장
   # ref) self.train_writer = tf.summary.FileWriter(os.path.normpath(os.path.join(summaries_dir, 'train')))
